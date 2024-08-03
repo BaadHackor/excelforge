@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>ExcelForge</AssemblyName>
+    <RootNamespace>ExcelForge</RootNamespace>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <Version>0.1.0</Version>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Company>ExcelForge Project</Company>
+    <Product>ExcelForge</Product>
+    <Description>Open-source Excel automation utility</Description>
+    <Copyright>Copyright 2024 Alex Mercer</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <Optimize>true</Optimize>
+    <!-- Suppress icon warning if .ico is absent during CI builds -->
+    <ApplicationIcon Condition="Exists('Resources\excelforge.ico')">Resources\excelforge.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EPPlus" Version="7.0.9" />
+    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="8.0.0" />
+  </ItemGroup>
+
+  <!--
+    ExcelForge.Native.dll is a C++ binary placed alongside the exe at runtime.
+    We reference it here only to copy it to the output folder when it exists.
+    The build does NOT fail if it is absent (Condition guard below).
+  -->
+  <ItemGroup>
+    <None Condition="Exists('ExcelForge.Native.dll')"
+          Update="ExcelForge.Native.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

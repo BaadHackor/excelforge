@@ -1,0 +1,49 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  release:
+    types: [ published ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore src/ExcelForge/ExcelForge.csproj
+
+      - name: Build
+        run: |
+          dotnet build src/ExcelForge/ExcelForge.csproj `
+            --configuration Release `
+            --no-restore `
+            -p:Platform=x64
+
+      - name: Publish (self-contained)
+        if: github.event_name == 'release'
+        run: |
+          dotnet publish src/ExcelForge/ExcelForge.csproj `
+            --configuration Release `
+            --runtime win-x64 `
+            --self-contained false `
+            -p:PublishSingleFile=false `
+            --output ./publish
+
+      - name: Upload release assets
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            publish/ExcelForge.exe
+            publish/ExcelForge.Native.dll
