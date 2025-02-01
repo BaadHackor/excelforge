@@ -4,8 +4,8 @@ internal static class AppConstants
 {
 
     public const string AppName        = "ExcelForge";
-    public const string Version        = "0.5.3";
-    public const string VersionDisplay = "v0.5.3";
+    public const string Version        = "0.6.0";
+    public const string VersionDisplay = "v0.6.0";
 
     public const string GitHubOwner   = "BaadHackor";
     public const string GitHubRepo    = "excelforge";
